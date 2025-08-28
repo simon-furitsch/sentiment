@@ -11,12 +11,31 @@ package cli
 object Cli {
   def run(args: Array[String]): Unit = {
     args.toList match {
-      case "download" :: params => println(s"Cmd: DOWNLOAD, Params: $params")
-      case "eda" :: params => println(s"Cmd: EDA, Params: $params")
-      case "train" :: params => println(s"Cmd: TRAIN, Params: $params")
-      case "eval" :: params => println(s"Cmd: EVAL, Params: $params")
+      case command :: params =>
+        val parameters = splitArgs(params)
+        command match {
+          case "download" => println(s"Cmd: DOWNLOAD, Params: $parameters")
+          case "eda" => println(s"Cmd: EDA, Params: $parameters")
+          case "train" => println(s"Cmd: TRAIN, Params: $parameters")
+          case "eval" => println(s"Cmd: EVAL, Params: $parameters")
+          case _ => println("Unknown Command")
+        }
       case Nil => println(s"Usage: download|eda|train|eval --params")
-      case _ => println("Unknown Command")
     }
+  }
+
+  /**
+   * Splits the command parameters and builds a Map [param,value]
+   * @param params List of parameters
+   * @return Map[param,value]
+   */
+  def splitArgs(params: List[String]): Map[String,String] = {
+    if(params.isEmpty) Map.empty[String,String]
+    else params.
+      filter(_.startsWith("--"))
+      .map(_.stripPrefix("--"))
+      .map(_.split("="))
+      .map{case Array(k,v) => k -> v}
+      .toMap
   }
 }
