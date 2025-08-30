@@ -17,25 +17,23 @@ object ConfigLoader {
   }
 
   object dataset {
-    /*dataset {
-      fileName = "sentiment140"
-      fileExtension = "csv"
-      header = false
-      labelColumn = "target"
-    }*/
     val fileName:String = config.getString("dataset.fileName")
     val fileExtension:String = config.getString("dataset.fileExtension")
     val hasHeader:Boolean = config.getBoolean("dataset.hasHeader")
-    val labelColumn:String = config.getString("dataset.target")
+    val labelColumn:String = config.getString("dataset.labelColumn")
   }
 
   object model {
     val algorithm:String = config.getString("model.algorithm")
-    val trainSplit:Double = config.getDouble("model.trainSplit")
-    val testSplit:Double = config.getDouble("model.testSplit")
-    val validateSplit:Double = config.getDouble("model.validateSplit")
     val threshold:Double = config.getDouble("model.threshold")
     val iterations:Long = config.getLong("model.iterations")
+  }
+
+  object split {
+    val train:Double = config.getDouble("split.train")
+    val test:Double = config.getDouble("split.test")
+    val validate:Double = config.getDouble("split.validate")
+    val seed:Long = config.getLong("split.seed")
   }
 
   object features {
