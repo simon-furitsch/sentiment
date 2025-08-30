@@ -16,6 +16,19 @@ object ConfigLoader {
     val runs:String = config.getString("paths.runs")
   }
 
+  object dataset {
+    /*dataset {
+      fileName = "sentiment140"
+      fileExtension = "csv"
+      header = false
+      labelColumn = "target"
+    }*/
+    val fileName:String = config.getString("dataset.fileName")
+    val fileExtension:String = config.getString("dataset.fileExtension")
+    val hasHeader:Boolean = config.getBoolean("dataset.hasHeader")
+    val labelColumn:String = config.getString("dataset.target")
+  }
+
   object model {
     val algorithm:String = config.getString("model.algorithm")
     val trainSplit:Double = config.getDouble("model.trainSplit")
