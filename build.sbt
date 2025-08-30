@@ -9,6 +9,7 @@ lazy val root = (project in file("."))
     idePackagePrefix := Some("net.furitsch.sentiment"),
     libraryDependencies ++= Seq(
       "org.apache.spark" %% "spark-sql"   % "4.0.0",
-      "org.apache.spark" %% "spark-mllib" % "4.0.0"
+      "org.apache.spark" %% "spark-mllib" % "4.0.0",
+      "com.typesafe" % "config" % "1.4.4"
     )
   )

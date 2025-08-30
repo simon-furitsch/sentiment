@@ -6,6 +6,7 @@ This project is designed as a portfolio reference
 - Scala 2.13.16
 - sbt 1.11.5
 - Apache Spark 4.0
+- Typesafe Config Library 1.4.4
 
 ## Structure
 **data** -> datasets for the training and evaluation (downloaded automatically when running the program)  
