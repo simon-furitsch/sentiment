@@ -8,7 +8,7 @@ import java.io.File
  * Used to load the default configs
  */
 object ConfigLoader {
-  private val config = ConfigFactory.parseFile(new File("conf/default.conf")).resolve()
+  private val config = ConfigFactory.parseFile(new File("config/default.conf")).resolve()
 
   object paths {
     val data:String = config.getString("paths.data")
