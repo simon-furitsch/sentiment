@@ -1,6 +1,9 @@
 package net.furitsch.sentiment
 package cli
 
+import filesystem.DirectoryManager
+import run.RunManager
+
 /**
  *  Command Line Interface
  *
@@ -14,6 +17,10 @@ object Cli {
       case command :: params =>
         val parameters = splitArgs(params)
         command match {
+          case "init-run" => {
+            val context = RunManager.initNewRun()
+            DirectoryManager.createDirectories(context)
+          }
           case "download" => println(s"Cmd: DOWNLOAD, Params: $parameters")
           case "eda" => println(s"Cmd: EDA, Params: $parameters")
           case "train" => println(s"Cmd: TRAIN, Params: $parameters")
