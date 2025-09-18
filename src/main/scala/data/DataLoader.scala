@@ -3,7 +3,7 @@ package data
 
 import config.ConfigLoader
 
-import org.apache.spark.sql.Dataset
+import org.apache.spark.sql.{DataFrame, Dataset}
 import org.apache.spark.sql.classic.SparkSession
 
 object DataLoader {
@@ -12,11 +12,10 @@ object DataLoader {
   private val fileExtension = ConfigLoader.dataset.fileExtension
   private val path = s"$dataPath/$fileName.$fileExtension"
 
-  def loadDataset(spark:SparkSession):Dataset[Tweet] = {
+  def loadDataset(spark:SparkSession):DataFrame = {
     import spark.implicits._
     spark.read
       .option("header",ConfigLoader.dataset.hasHeader.toString)
       .csv(path)
-      .as[Tweet]
   }
 }
