@@ -12,10 +12,13 @@ object DataLoader {
   private val fileExtension = ConfigLoader.dataset.fileExtension
   private val path = s"$dataPath/$fileName.$fileExtension"
 
-  def loadDataset(spark:SparkSession):DataFrame = {
+  def loadDataset(spark: SparkSession): DataFrame = {
     import spark.implicits._
-    spark.read
-      .option("header",ConfigLoader.dataset.hasHeader.toString)
+    val df = spark.read
+      .option("header", ConfigLoader.dataset.hasHeader.toString)
       .csv(path)
+    if (!ConfigLoader.dataset.hasHeader)
+      df.toDF("target", "id", "date", "flag", "user", "text")
+    else df
   }
 }
