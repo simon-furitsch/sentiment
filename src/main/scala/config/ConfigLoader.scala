@@ -26,7 +26,8 @@ object ConfigLoader {
   object model {
     val algorithm:String = config.getString("model.algorithm")
     val threshold:Double = config.getDouble("model.threshold")
-    val iterations:Long = config.getLong("model.iterations")
+    val iterations:Int = config.getInt("model.iterations")
+    val regParam:Double = config.getDouble("model.regParam")
   }
 
   object split {
@@ -39,8 +40,7 @@ object ConfigLoader {
   object features {
     val useNGram:Boolean = config.getBoolean("features.useNGram")
     val nGramSize:Int = config.getInt("features.nGramSize")
-    val useCountVectorizer:Boolean = config.getBoolean("features.useCountVectorizer")
-    val useTFIDF:Boolean = config.getBoolean("features.useTFIDF")
-    val useWord2Vec:Boolean = config.getBoolean("features.useWord2Vec")
+    val vectorizer:String = config.getString("vectorizer")
+    val useIDF:Boolean = config.getBoolean("useIDF")
   }
 }
