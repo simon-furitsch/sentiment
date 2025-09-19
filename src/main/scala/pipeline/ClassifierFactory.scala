@@ -16,7 +16,7 @@ object ClassifierFactory {
 
         new LogisticRegression()
           .setFeaturesCol("features")
-          .setLabelCol("label_binary")
+          .setLabelCol("binary_label")
           .setThreshold(threshold)
           .setMaxIter(iterations)
           .setRegParam(regParam)
@@ -24,7 +24,7 @@ object ClassifierFactory {
       case "naiveBayes" =>
         new NaiveBayes()
         .setFeaturesCol("features")
-        .setLabelCol("label_binary")
+        .setLabelCol("binary_label")
         .setModelType("multinomial")
 
       case _ => throw new IllegalArgumentException("Classifier type unknown. Please check the config!")
