@@ -2,10 +2,11 @@ package net.furitsch.sentiment
 package run
 
 import data.DataLoader
-import filesystem.DirectoryManager
+import filesystem.{DirectoryManager, PersistenceManager}
 import preprocess.Preprocessor
 import train.TrainService
 import utils.DatasetSplitter
+
 import org.apache.spark.sql.classic.SparkSession
 
 object RunService {
@@ -24,6 +25,9 @@ object RunService {
     val binarizedDataset = Preprocessor.toBinary(dataset)
     val Array(trainSet,testSet,validateSet) = DatasetSplitter.split(binarizedDataset)
     val model = TrainService.train(trainSet)
+    PersistenceManager.saveSnapshot(context)
+    PersistenceManager.saveModel(context,model)
+    PersistenceManager.saveContext(context)
     //Todo: Eval, Persistence
   }
 

@@ -14,6 +14,8 @@ object ConfigLoader {
     val data:String = config.getString("paths.data")
     val logs:String = config.getString("paths.logs")
     val runs:String = config.getString("paths.runs")
+    val conf:String = config.getString("paths.config")
+    val configName:String = config.getString("paths.configName")
   }
 
   object dataset {
@@ -40,7 +42,7 @@ object ConfigLoader {
   object features {
     val useNGram:Boolean = config.getBoolean("features.useNGram")
     val nGramSize:Int = config.getInt("features.nGramSize")
-    val vectorizer:String = config.getString("vectorizer")
-    val useIDF:Boolean = config.getBoolean("useIDF")
+    val vectorizer:String = config.getString("features.vectorizer")
+    val useIDF:Boolean = config.getBoolean("features.useIDF")
   }
 }

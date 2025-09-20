@@ -2,7 +2,9 @@ package net.furitsch.sentiment
 package cli
 
 import filesystem.DirectoryManager
-import run.RunManager
+import run.{RunManager, RunService}
+
+import org.apache.spark.sql.classic.SparkSession
 
 /**
  *  Command Line Interface
@@ -12,7 +14,7 @@ import run.RunManager
  *  Example: sbt "runMain net.furitsch.sentiment.App download --out=data/sentiment140.csv"
  */
 object Cli {
-  def run(args: Array[String]): Unit = {
+  def run(spark:SparkSession, args: Array[String]): Unit = {
     args.toList match {
       case command :: params =>
         val parameters = splitArgs(params)
@@ -21,6 +23,7 @@ object Cli {
             val context = RunManager.initNewRun()
             DirectoryManager.createDirectories(context)
           }
+          case "full-run" => RunService.fullRun(spark)
           case "download" => println(s"Cmd: DOWNLOAD, Params: $parameters")
           case "eda" => println(s"Cmd: EDA, Params: $parameters")
           case "train" => println(s"Cmd: TRAIN, Params: $parameters")

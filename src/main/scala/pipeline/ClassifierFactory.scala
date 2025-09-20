@@ -27,7 +27,7 @@ object ClassifierFactory {
         .setLabelCol("binary_label")
         .setModelType("multinomial")
 
-      case _ => throw new IllegalArgumentException("Classifier type unknown. Please check the config!")
+      case _ => throw new IllegalArgumentException("Classifier type unknown. Please check the config!") //Todo Logging
     }
   }
 
