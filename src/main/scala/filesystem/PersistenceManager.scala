@@ -3,6 +3,8 @@ package filesystem
 
 import config.ConfigLoader
 import run.RunContext
+
+import evaluation.EvaluationMetrics
 import org.apache.spark.ml.PipelineModel
 
 import java.nio.charset.StandardCharsets
@@ -72,6 +74,28 @@ object PersistenceManager {
     } catch {
       //Todo Logging
       case e:Exception => false
+    }
+  }
+
+  /**
+   * Saves the metrics as a .yaml file into runs/{id}/metrics/metrics.yaml
+   * @param context RunContext
+   * @param metrics Evaluation Metrics to save
+   * @return true if it worked, false if an exception occurred
+   */
+  def saveMetrics(context:RunContext, metrics: EvaluationMetrics):Boolean = {
+    try {
+      val input =
+        s"""${metrics.metrics.map{case (metric,value) => s"$metric = $value"}.mkString("\n")}"""
+
+      Files.write(context.evalDir.resolve(
+        s"metrics.yaml"),
+        input.getBytes(StandardCharsets.UTF_8))
+
+      true
+    } catch {
+      //Todo: Loggins
+      case e: Exception => false
     }
   }
 

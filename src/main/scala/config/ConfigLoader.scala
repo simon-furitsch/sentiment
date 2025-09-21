@@ -23,6 +23,7 @@ object ConfigLoader {
     val fileExtension:String = config.getString("dataset.fileExtension")
     val hasHeader:Boolean = config.getBoolean("dataset.hasHeader")
     val labelColumn:String = config.getString("dataset.labelColumn")
+    val binaryLabelColumn:String = config.getString("dataset.binaryLabelColumn")
   }
 
   object model {
@@ -44,5 +45,11 @@ object ConfigLoader {
     val nGramSize:Int = config.getInt("features.nGramSize")
     val vectorizer:String = config.getString("features.vectorizer")
     val useIDF:Boolean = config.getBoolean("features.useIDF")
+  }
+
+  object evaluation {
+    val useAccuracy:Boolean = config.getBoolean("evaluation.useAccuracy")
+    val useF1:Boolean = config.getBoolean("evaluation.useF1")
+    val useAreaUnderROC:Boolean = config.getBoolean("evaluation.useAreaUnderROC")
   }
 }

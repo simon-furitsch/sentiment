@@ -1,6 +1,7 @@
 package net.furitsch.sentiment
 package preprocess
 
+import config.ConfigLoader
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.{col, when}
 
@@ -13,7 +14,9 @@ object Preprocessor {
    * @return dataframe with binary label
    */
   def toBinary(df: DataFrame): DataFrame = {
-    df.withColumn("binary_label",when(col("target").cast("int")===0,1).otherwise(0))
+    df.withColumn(
+      ConfigLoader.dataset.binaryLabelColumn,
+      when(col("target").cast("int")===0,1).otherwise(0))
   }
 
 }
