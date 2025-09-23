@@ -3,12 +3,12 @@ package filesystem
 
 import config.ConfigLoader
 import run.RunContext
-
 import evaluation.EvaluationMetrics
+
 import org.apache.spark.ml.PipelineModel
 
 import java.nio.charset.StandardCharsets
-import java.nio.file.{Files, Paths}
+import java.nio.file.{Files, Path, Paths}
 
 object PersistenceManager {
   /**
@@ -53,6 +53,24 @@ object PersistenceManager {
       case e: Exception => false
     }
   }
+  def loadContext(path: Path):RunContext = {
+    val lines = Files.readAllLines(path.resolve("context.yaml"), StandardCharsets.UTF_8)
+    val contextMap = lines.toArray(new Array[String](lines.size())).map { line =>
+      val Array(k, v) = line.split(":", 2)
+      k.trim -> v.trim
+    }.toMap
+
+    RunContext(
+      contextMap("id").toInt,
+      Paths.get(contextMap("root")),
+      contextMap("configName"),
+      Paths.get(contextMap("modelDir")),
+      Paths.get(contextMap("evalDir")),
+      Paths.get(contextMap("snapshotsDir")),
+      Paths.get(contextMap("logsDir"))
+    )
+  }
+
 
   /**
    * Saves a snapshot of the configuration file under runs/{id}/snapshots/{configname}
