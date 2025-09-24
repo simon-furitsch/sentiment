@@ -4,7 +4,7 @@ package pipeline
 import config.ConfigLoader
 
 import org.apache.spark.ml.{Estimator, Pipeline, PipelineStage}
-import org.apache.spark.ml.feature.{CountVectorizer, HashingTF, IDF, NGram, RegexTokenizer, StopWordsRemover, Word2Vec}
+import org.apache.spark.ml.feature.{CountVectorizer, HashingTF, IDF, NGram, RegexTokenizer, SQLTransformer, StopWordsRemover, VectorAssembler, Word2Vec}
 
 object PipelineBuilder {
 

@@ -6,6 +6,7 @@ import filesystem.{DirectoryManager, PersistenceManager}
 import preprocess.Preprocessor
 import train.TrainService
 import utils.DatasetSplitter
+import org.apache.spark.ml.Pipeline
 
 import evaluation.Evaluator
 import org.apache.spark.sql.classic.SparkSession
@@ -29,8 +30,9 @@ object RunService {
     PersistenceManager.saveSnapshot(context)
     PersistenceManager.saveModel(context,model)
     PersistenceManager.saveContext(context)
-    val metrics = Evaluator.evaluate(model,testSet)
+    val metrics = Evaluator.evaluate(context,model,testSet)
     PersistenceManager.saveMetrics(context,metrics)
+
     //Todo: Eval, Persistence
   }
 
