@@ -5,10 +5,10 @@ import com.typesafe.config.ConfigFactory
 import java.io.File
 
 /**
- * Used to load the default configs
+ * Configuration of a run
  */
-object ConfigLoader {
-  private val config = ConfigFactory.parseFile(new File("config/default.conf")).resolve()
+class Config(path:String) {
+  private val config = ConfigFactory.parseFile(new File(path)).resolve()
 
   object paths {
     val data:String = config.getString("paths.data")

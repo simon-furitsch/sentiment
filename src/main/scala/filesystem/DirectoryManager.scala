@@ -17,10 +17,10 @@ object DirectoryManager {
   }
 
   /**
-   * Gets the folder names within the runs folder as a List of Strings
+   * Gets the folder names within the runs folder as a list of strings
    * The path is set up within the run config File
    * (!)Assumes that there are no external files present within the directories
-   * @param path Path to the run folder
+   * @param path the path to the runs folder
    * @return All directory names within the runs folder
    */
   def getRunDirectories(path: Path): List[String] = {

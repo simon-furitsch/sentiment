@@ -6,6 +6,8 @@ import run.{RunManager, RunService}
 
 import org.apache.spark.sql.classic.SparkSession
 
+import java.nio.file.Paths
+
 /**
  *  Command Line Interface
  *
@@ -18,19 +20,25 @@ object Cli {
     args.toList match {
       case command :: params =>
         val parameters = splitArgs(params)
+        val configName = parameters.getOrElse("config","default.conf")
         command match {
-          case "init-run" => {
-            val context = RunManager.initNewRun()
-            DirectoryManager.createDirectories(context)
-          }
-          case "full-run" => RunService.fullRun(spark)
-          case "download" => println(s"Cmd: DOWNLOAD, Params: $parameters")
-          case "eda" => println(s"Cmd: EDA, Params: $parameters")
-          case "train" => println(s"Cmd: TRAIN, Params: $parameters")
-          case "eval" => println(s"Cmd: EVAL, Params: $parameters")
+          case "init-run" => RunService.initRun(configName)
+          case "full-run" => RunService.fullRun(configName,spark)
+          //TODO: case "download" => println(s"Cmd: DOWNLOAD, Params: $parameters")
+          //TODO: case "eda" => println(s"Cmd: EDA, Params: $parameters")
+          case "train" => val runID = parameters
+            .getOrElse("id",throw new IllegalArgumentException("No RunID set! Usage: train --id=\"id\""))
+            .toInt
+
+            RunService.continueWithTraining(runID,spark)
+          case "eval" => val runID = parameters
+            .getOrElse("id",throw new IllegalArgumentException("No RunID set! Usage: eval --id=\"id\""))
+            .toInt
+
+            RunService.continueWithEvaluation(runID,spark)
           case _ => println("Unknown Command")
         }
-      case Nil => println(s"Usage: download|eda|train|eval --params")
+      case Nil => println(s"Usage: init-run|full-run|train|eval --params")
     }
   }
 

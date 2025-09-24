@@ -1,17 +1,22 @@
 package net.furitsch.sentiment
 package pipeline
 
-import config.ConfigLoader
+import config.Config
 
 import org.apache.spark.ml.{Estimator, Pipeline, PipelineStage}
 import org.apache.spark.ml.feature.{CountVectorizer, HashingTF, IDF, NGram, RegexTokenizer, SQLTransformer, StopWordsRemover, VectorAssembler, Word2Vec}
 
 object PipelineBuilder {
-
-  def buildPipeline(estimator:Estimator[_]): Pipeline = {
-    val vectorizerInput = if (ConfigLoader.features.useNGram) "ngrams" else "cleanedTokens"
-    val useNgram = ConfigLoader.features.useNGram
-    val useIDF = ConfigLoader.features.useIDF
+  /**
+   * Builds the pipeline, defined in the configuration file
+   * @param config the configuration of the run
+   * @param estimator the classifier for the run
+   * @return the pipeline
+   */
+  def buildPipeline(config:Config, estimator:Estimator[_]): Pipeline = {
+    val vectorizerInput = if (config.features.useNGram) "ngrams" else "cleanedTokens"
+    val useNgram = config.features.useNGram
+    val useIDF = config.features.useIDF
     val vectorizerOutput = if (useIDF) "vectorized" else "features"
 
     val tokenizer = new RegexTokenizer()
@@ -26,7 +31,7 @@ object PipelineBuilder {
 
     val nGramStage:Seq[PipelineStage] =
       if(useNgram) Seq(new NGram()
-        .setN(ConfigLoader.features.nGramSize)
+        .setN(config.features.nGramSize)
         .setInputCol("cleanedTokens")
         .setOutputCol("ngrams"))
       else Seq.empty
@@ -47,7 +52,7 @@ object PipelineBuilder {
       .setInputCol("vectorized")
       .setOutputCol("features")
 
-    val features = ConfigLoader.features.vectorizer match {
+    val features = config.features.vectorizer match {
       case "tf" => if (useIDF) Seq(tf, idf) else Seq(tf)
       case "countVectorizer" => if (useIDF) Seq(countVectorizer, idf) else Seq(countVectorizer)
       case "word2vec" => Seq(word2vec)

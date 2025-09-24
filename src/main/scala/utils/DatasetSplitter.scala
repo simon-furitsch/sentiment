@@ -1,24 +1,24 @@
 package net.furitsch.sentiment
 package utils
 
-import config.ConfigLoader
+import config.Config
 
+import net.furitsch.sentiment.config
 import org.apache.spark.sql.{DataFrame, Dataset}
 
 object DatasetSplitter {
 
-  private val splitWeights = Array(
-    ConfigLoader.split.train,
-    ConfigLoader.split.test,
-    ConfigLoader.split.validate)
-
   /**
-   * Splits a Dataset into train, validation and test sets
-   * Seed & weights set up in the configuration file
-   * @param df dataframe to split
-   * @return Array(train,test,valid)
+   * Splits a data frame into train, validation and test sets
+   * The seed & weights are defined in the configuration file
+   * @param df the dataframe to split
+   * @return an array containing train, validation and test splits
    * */
-  def split(df: DataFrame):Array[DataFrame] = {
-    df.randomSplit(splitWeights,ConfigLoader.split.seed)
+  def split(config:Config, df: DataFrame):Array[DataFrame] = {
+    val splitWeights = Array(
+      config.split.train,
+      config.split.test,
+      config.split.validate)
+    df.randomSplit(splitWeights,config.split.seed)
   }
 }

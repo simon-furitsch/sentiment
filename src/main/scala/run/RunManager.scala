@@ -1,46 +1,49 @@
 package net.furitsch.sentiment
 package run
 
-import config.ConfigLoader
+import config.Config
 
-import net.furitsch.sentiment.filesystem.DirectoryManager
+import net.furitsch.sentiment.filesystem.{DirectoryManager, PersistenceManager}
 
 import java.nio.file.{Files, Path, Paths}
 
 object RunManager {
 
   /**
-   * TODO: Race Condition if parallelized
+   * (!)Race Condition if parallelized
    * Initializes a new run.
-   * Computes a new run ID
+   * Generates a new run ID
    * Creates a RunContext for the file system to create the corresponding directories
-   * @return RunContext with File paths and id
+   * @return a run context containing file paths and the run id
    */
-  def initNewRun():RunContext = {
-    val path:Path = Paths.get(ConfigLoader.paths.runs)
+  def initNewRun(config:Config):RunContext = {
+    val path:Path = Paths.get(config.paths.runs)
     val maxID = getMaxRunId(DirectoryManager.getRunDirectories(path))
     val newID = computeNextRunId(maxID)
     val runRoot = path.resolve(newID.toString)
     RunContext(
       newID,
       runRoot,
-      ConfigLoader.paths.configName,
+      config.paths.configName,
       runRoot.resolve("model"),
       runRoot.resolve("evaluation"),
       runRoot.resolve("snapshots"),
       runRoot.resolve("logs"))
   }
 
-  def resumeRun(id:Int):Unit = {
-    
+  /**
+   * Resumes a run saved inside the runs folder
+   * @param id the id of the run to load
+   * @return the run context of the run
+   */
+  def resumeRun(id:Int):RunContext = {
+    PersistenceManager.loadContext(Paths.get(s"runs/$id/context.yaml"))
   }
-
-
 
   /**
    * Gets the highest run ID
-   * @param folders Directory names
-   * @return Highest run ID
+   * @param folders directory names
+   * @return the highest run ID
    */
   def getMaxRunId(folders: List[String]) : Int = {
     val ids = folders.flatMap(_.toIntOption)
@@ -49,8 +52,8 @@ object RunManager {
 
   /**
    * Gets a new run ID by incrementing the highest run ID by 1
-   * @param maxRun highest existing run ID
-   * @return next run ID
+   * @param maxRun the highest existing run ID
+   * @return the next run ID
    */
   def computeNextRunId(maxRun:Int):Int ={
     maxRun+1
